@@ -142,6 +142,7 @@ public class AdvertServiceImpl implements AdvertService {
 
         rabbitMqService.sendNotification(request);//to change the advert status asynchronous comm. with rabbitmq
 
+        optionalAdvert.get().setAdvertStatus(request.getAdvertStatus());
 
         return new ResponseEntity<>(optionalAdvert.get(),HttpStatus.OK);
     }
@@ -159,6 +160,7 @@ public class AdvertServiceImpl implements AdvertService {
 
         rabbitMqService.sendNotification(request);//to change the advert status asynchronous comm. with rabbitmq
 
+        optionalAdvert.get().setAdvertStatus(request.getAdvertStatus());
 
         return new ResponseEntity<>(optionalAdvert.get(),HttpStatus.OK);
     }
