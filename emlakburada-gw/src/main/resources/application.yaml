@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: emlakburada-gateway
+
+
+  cloud:
+    gateway:
+      routes:
+      - id: emlakburada-advert
+        uri: lb://EMLAKBURADA-ADVERT
+        predicates:
+          - Path=/emlakburada/api/v1/adverts/**
+      - id: emlakburada-user
+        uri: lb://EMLAKBURADA-USER
+        predicates:
+          - Path=/emlakburada/api/v1/auth/** , /emlakburada/api/v1/user/**
+      - id: emlakburada-package
+        uri: lb://EMLAKBURADA-PACKAGE
+        predicates:
+          - Path=/emlakburada/api/v1/packages/**
+      - id: emlakburada-order
+        uri: lb://EMLAKBURADA-ORDER
+        predicates:
+          - Path=/emlakburada/api/v1/orders/**
+
+server:
+  port: 8080
+
