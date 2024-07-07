@@ -82,7 +82,7 @@ public class OrderServiceImpl implements OrderService {
     private boolean processPayment(Double totalAmount) {
         //Here,payment might be processing synchronous.
         //For example,we can send a HTTP request to a payment service
-        //Assuming that it is successfull everytime.
+        //Assuming that it is successfull everytime
         return true;
     }
 
