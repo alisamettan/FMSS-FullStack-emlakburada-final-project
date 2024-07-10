@@ -2,11 +2,13 @@ package com.patika.emlakburada_user.service;
 
 
 
+import com.patika.emlakburada_user.dto.request.UserNotificationRequest;
 import com.patika.emlakburada_user.dto.request.UserRequest;
 import com.patika.emlakburada_user.dto.response.AuthenticationResponse;
 import com.patika.emlakburada_user.dto.response.UserResponse;
 import com.patika.emlakburada_user.entity.User;
 import com.patika.emlakburada_user.exception.EmlakBuradaException;
+import com.patika.emlakburada_user.queue.RabbitMqService;
 import com.patika.emlakburada_user.repository.UserRepository;
 import com.patika.emlakburada_user.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +29,7 @@ public class AuthenticationService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
+    private final RabbitMqService rabbitMqService;
 
     public ResponseEntity<UserResponse> register(String fullName, String email, String password){
         Optional<User> existingUser=userRepository.findUserByEmail(email);
@@ -49,6 +52,12 @@ public class AuthenticationService {
         user=userRepository.save(user);
 
         UserResponse userResponse=new UserResponse(user.getId(),user.getFullName(),user.getEmail(),user.getListingRights(),user.getEndDateOfPackage(),user.getIsPrioritized());
+
+        //When user registers notification is sent to rabbitmq
+        UserNotificationRequest request=new UserNotificationRequest(userResponse.getFullName(),userResponse.getEmail(),userResponse.getListingRights());
+        rabbitMqService.sendNotification(request);
+
+
 
         return new ResponseEntity<>(userResponse,HttpStatus.OK);
     }
