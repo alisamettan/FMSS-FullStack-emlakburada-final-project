@@ -57,6 +57,9 @@ public class Advert {
     @Column(name = "price")
     private Double price;
 
+    @Column(name = "is_prioritized")
+    private Boolean isPrioritized;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "advert_status")
     private AdvertStatus advertStatus;

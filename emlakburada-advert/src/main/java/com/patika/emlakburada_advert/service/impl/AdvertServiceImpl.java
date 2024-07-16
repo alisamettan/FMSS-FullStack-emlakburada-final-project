@@ -33,8 +33,7 @@ public class AdvertServiceImpl implements AdvertService {
 
     @Override
     public ResponseEntity<AdvertResponse> save(AdvertRequest request) {
-        //TODO =>burada userClient ile userresponse bulunacak bir userREsponse içindeki id toAdvert() içinde gönderilecek.
-        //Yani aslında user bu save işlemini yapabilmesi için paket satın alması lazım bunu aklından çıkarma.
+
 
         UserResponse userResponse =userService.getUserById(request.getUserId());
 
@@ -46,7 +45,7 @@ public class AdvertServiceImpl implements AdvertService {
             throw new EmlakBuradaException("The package has expired.User must purchase new package.",HttpStatus.BAD_REQUEST);
         }
 
-        Advert advert= AdvertConverter.toAdvert(request);
+        Advert advert= AdvertConverter.toAdvert(request,userResponse);
         advert=advertRepository.save(advert);
 
         //Listing rights azaltılması ve userSErvice üzerinde güncellenmesi

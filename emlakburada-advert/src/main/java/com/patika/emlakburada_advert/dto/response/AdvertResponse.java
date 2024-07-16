@@ -12,6 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 public class AdvertResponse {
+    private Long id;
     private Long userId;
     private String city;
     private String district;
@@ -24,5 +25,7 @@ public class AdvertResponse {
     private Double squareMeters;
     private Double price;
     private AdvertStatus advertStatus;
+    private Boolean isPrioritized;
     private List<Image> images;
+
 }

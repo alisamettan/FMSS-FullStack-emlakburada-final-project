@@ -1,5 +1,6 @@
 package com.patika.emlakburada_advert.converter;
 
+import com.patika.emlakburada_advert.client.user.response.UserResponse;
 import com.patika.emlakburada_advert.dto.request.AdvertRequest;
 import com.patika.emlakburada_advert.dto.response.AdvertResponse;
 import com.patika.emlakburada_advert.entity.Advert;
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AdvertConverter {
-    public static Advert toAdvert(AdvertRequest request) {
+    public static Advert toAdvert(AdvertRequest request, UserResponse userResponse) {
         Advert advert=new Advert();
         advert.setUserId(request.getUserId());
         advert.setCity(request.getCity());
@@ -24,6 +25,7 @@ public class AdvertConverter {
         advert.setSquareMeters(request.getSquareMeters());
         advert.setPrice(request.getPrice());
         advert.setAdvertStatus(AdvertStatus.IN_REVIEW);
+        advert.setIsPrioritized(userResponse.getIsPrioritized());
 
         // Convert AdvertRequest's image URLs to Image entities and add to Advert's images list
         List<Image> images = new ArrayList<>();
@@ -39,7 +41,7 @@ public class AdvertConverter {
     }
 
     public static AdvertResponse toAdvertResponse(Advert advert) {
-        AdvertResponse advertResponse=new AdvertResponse(advert.getUserId(),advert.getCity(),
+        AdvertResponse advertResponse=new AdvertResponse(advert.getId(),advert.getUserId(),advert.getCity(),
                 advert.getDistrict(),
                 advert.getHomeType(),
                 advert.getAdvertType(),
@@ -50,7 +52,9 @@ public class AdvertConverter {
                 advert.getSquareMeters(),
                 advert.getPrice(),
                 advert.getAdvertStatus(),
-                advert.getImages());
+                advert.getIsPrioritized(),
+                advert.getImages()
+                );
 
         return advertResponse;
     }
