@@ -4,6 +4,7 @@ package com.patika.emlakburada_user.service;
 
 import com.patika.emlakburada_user.dto.request.UserNotificationRequest;
 import com.patika.emlakburada_user.dto.request.UserRequest;
+import com.patika.emlakburada_user.dto.request.enums.NotificationType;
 import com.patika.emlakburada_user.dto.response.AuthenticationResponse;
 import com.patika.emlakburada_user.dto.response.UserResponse;
 import com.patika.emlakburada_user.entity.User;
@@ -54,7 +55,7 @@ public class AuthenticationService {
         UserResponse userResponse=new UserResponse(user.getId(),user.getFullName(),user.getEmail(),user.getListingRights(),user.getEndDateOfPackage(),user.getIsPrioritized());
 
         //When user registers notification is sent to rabbitmq
-        UserNotificationRequest request=new UserNotificationRequest(userResponse.getFullName(),userResponse.getEmail(),userResponse.getListingRights());
+        UserNotificationRequest request=new UserNotificationRequest(userResponse.getFullName(),userResponse.getEmail(),userResponse.getListingRights(), NotificationType.EMAIL);
         rabbitMqService.sendNotification(request);
 
 
@@ -70,9 +71,10 @@ public class AuthenticationService {
             throw new EmlakBuradaException("Invalid password",HttpStatus.BAD_REQUEST);
         }
 
-        String token=jwtUtil.generateToken(user.getEmail());
+        String token=jwtUtil.generateToken(user);
         AuthenticationResponse authenticationResponse=new AuthenticationResponse();
         authenticationResponse.setToken(token);
+        authenticationResponse.setUserId(user.getId());
 
         return new ResponseEntity<>(authenticationResponse,HttpStatus.CREATED);
     }

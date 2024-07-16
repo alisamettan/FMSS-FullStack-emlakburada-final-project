@@ -1,67 +1,78 @@
 package com.patika.emlakburada_user.util;
 
 
+import com.patika.emlakburada_user.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import lombok.extern.slf4j.Slf4j;
+import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
+
+import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Function;
 
-
-@Service
-@Slf4j
+@Component
 public class JwtUtil {
 
-    private String SECRET_KEY = "secret";
+    private static final String SECRET_KEY = "emlakburada-patika-secret-key-emlakburada-patika-secret-key-emlakburada-patika-secret-key";
 
-    public String extractUsername(String token) {
-        return extractClaim(token, Claims::getSubject);
+    private static final long EXPIRATION_TIME = 3000_000;
+
+    private Key key;
+
+    @PostConstruct
+    public void init() {
+        this.key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
     }
 
-    public Date extractExpiration(String token) {
-        return extractClaim(token, Claims::getExpiration);
+    private Claims getAllClaimsFromToken(String token) {
+        //// @formatter:off
+        return Jwts
+                .parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+        // @formatter:on
     }
 
-    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-        final Claims claims = extractAllClaims(token);
-        return claimsResolver.apply(claims);
+    public String getUserName(String token) {
+        return getAllClaimsFromToken(token).getSubject();
     }
 
-    private Claims extractAllClaims(String token) {
-        return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
+    public Date getExpirationDate(String token) {
+        return getAllClaimsFromToken(token).getExpiration();
     }
 
-    private Boolean isTokenExpired(String token) {
-        return extractExpiration(token).before(new Date());
+    public boolean isTokenExpired(String token) {
+        return this.getExpirationDate(token).before(new Date());
     }
 
-    public String generateToken(String username) {
+    public String generateToken(User user) {
+
         Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, username);
+        claims.put("email", user.getEmail());
+        claims.put("id", user.getId());
+
+        long now = System.currentTimeMillis();
+
+        // @formatter:off
+
+        return Jwts
+                .builder()
+                .setClaims(claims)
+                .setSubject(user.getEmail())
+                .setIssuedAt(new Date())
+                .setIssuer("emlakburada")
+                .setExpiration( new Date(now + EXPIRATION_TIME))
+                .signWith(key, SignatureAlgorithm.HS512)
+                .compact();
+
+        // @formatter:on
     }
 
-    private String createToken(Map<String, Object> claims, String subject) {
-        return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 saat geçerlilik
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY).compact();
-    }
-
-    public Boolean validateToken(String token, String username) {
-        final String extractedUsername = extractUsername(token);
-        boolean isValid = (extractedUsername.equals(username) && !isTokenExpired(token));
-
-        if (isValid) {
-            log.info("Token is valid for user: {}", username);
-        } else {
-            log.warn("Invalid token received for user: {}", username);
-        }
-
-        return isValid;
-    }
 }

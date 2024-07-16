@@ -1,6 +1,5 @@
 package com.patika.emlakburada_user.config;
 
-import com.patika.emlakburada_user.util.JwtRequestFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,7 +27,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @EnableWebSecurity
 public class SecurityConfig {
-    private final JwtRequestFilter jwtRequestFilter;
+
 
     @Bean
     public PasswordEncoder passwordEncoder(){
@@ -44,23 +43,11 @@ public class SecurityConfig {
         return new ProviderManager(provider);
     }
 
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource(){
-        CorsConfiguration corsConfiguration=new CorsConfiguration();
-        corsConfiguration.setAllowedOrigins(List.of("http://localhost:8081/"));
-        corsConfiguration.setAllowedMethods(List.of("GET","POST","PUT","DELETE"));
-        corsConfiguration.setAllowedHeaders(List.of(HttpHeaders.AUTHORIZATION, HttpHeaders.CONTENT_TYPE));
 
-        UrlBasedCorsConfigurationSource source=new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**",corsConfiguration);
-
-        return source;
-    }
 
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception{
-        httpSecurity.cors().configurationSource(corsConfigurationSource());
         return httpSecurity.csrf(csrf->csrf.disable())
                 .authorizeHttpRequests(auth->{
                     auth.requestMatchers("/auth/**").permitAll();
@@ -70,8 +57,6 @@ public class SecurityConfig {
                     auth.requestMatchers("/orders/**").permitAll();
                     auth.anyRequest().authenticated();
                 }).httpBasic(Customizer.withDefaults())
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
 
     }
