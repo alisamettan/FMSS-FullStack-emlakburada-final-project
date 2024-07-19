@@ -1,6 +1,6 @@
 "use server";
-import Cookies from "js-cookie";
-import { revalidatePath, revalidateTag } from "next/cache";
+
+import { revalidateTag } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 

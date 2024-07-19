@@ -1,11 +1,9 @@
-export const getAllAdverts = async () => {
+export const getAllAdverts = async (page) => {
   try {
     const res = await fetch(
-      `http://localhost:8080/emlakburada/api/v1/adverts`,
+      `http://localhost:8080/emlakburada/api/v1/adverts?page=${page}`,
       {
-        next: {
-          revalidate: 5,
-        },
+        cache: "no-store",
       }
     );
 
@@ -16,7 +14,10 @@ export const getAllAdverts = async () => {
     const data = await res.json();
     console.log(data);
 
-    return data;
+    return {
+      adverts: data,
+      totalCount: data.length,
+    };
   } catch (error) {
     console.error("Error fetching adverts:", error);
   }
@@ -52,9 +53,7 @@ export const getAdvertByUserId = async (userId) => {
       `
             http://localhost:8080/emlakburada/api/v1/adverts/find-advert-byUserId/${userId}`,
       {
-        next: {
-          revalidate: 5,
-        },
+        cache: "no-store",
       }
     );
 

@@ -1,18 +1,27 @@
-import Image from "next/image";
 import Link from "next/link";
 import ImageCarousel from "./image-carousel";
 import { getAllAdverts } from "@/lib/adverts/data";
+import { PaginationComp } from "./pagination";
 
-const Adverts = async () => {
-  const adverts = await getAllAdverts();
+const Adverts = async ({ searchParams }) => {
+  console.log("searccccc", searchParams);
+  const page = searchParams?.page || 0;
 
+  const { adverts, totalCount } = await getAllAdverts(page);
+  console.log("lengthhhh", totalCount);
   console.log(adverts);
 
   return (
     <div className="p-10">
       <div className="flex flex-wrap gap-8 justify-center">
-        {adverts.map((advert, index) => {
+        {adverts?.map((advert, index) => {
           const isPrioritized = advert.isPrioritized;
+
+          // Pass advertisements should not be displayed
+          if (advert.advertStatus === "PASSIVE") {
+            return null;
+          }
+
           return (
             <div
               key={index}
@@ -42,17 +51,24 @@ const Adverts = async () => {
                 </div>
                 <div className="flex justify-between bg-slate-100 p-2 rounded-md">
                   <p>{advert.price} TRY</p>
-                  <Link
-                    className="cursor-pointer hover:text-blue-300"
-                    href={`/advert/${advert.id}`}
-                  >
-                    View Details
-                  </Link>
+                  {advert.advertStatus === "IN_REVIEW" ? (
+                    <span className="text-gray-400">IN_REVIEW</span>
+                  ) : (
+                    <Link
+                      className="cursor-pointer hover:text-blue-300"
+                      href={`/advert/${advert.id}`}
+                    >
+                      View Details
+                    </Link>
+                  )}
                 </div>
               </div>
             </div>
           );
         })}
+      </div>
+      <div className="pt-6">
+        <PaginationComp count={totalCount} />
       </div>
     </div>
   );

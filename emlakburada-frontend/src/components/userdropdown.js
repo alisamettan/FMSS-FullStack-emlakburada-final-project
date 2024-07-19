@@ -55,6 +55,13 @@ const UserDropDown = ({ fullName }) => {
           >
             Properties
           </MenuItem>
+          <MenuItem
+            onClick={() => {
+              router.push("/subscribe");
+            }}
+          >
+            Subscribe
+          </MenuItem>
           <MenuItem onClick={handleLogout}>Logout</MenuItem>
         </Menu>
       </div>
