@@ -16,4 +16,7 @@ public class OrderResponse {
     private Double totalAmount;
     private String status;
     private LocalDate orderDate;
+    private Long cardNumber;
+    private String expiration;
+    private Integer cvc;
 }

@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -36,7 +35,7 @@ public class OrderServiceImpl implements OrderService {
         UserResponse userResponse=userService.getUserById(request.getUserId());
         PackageResponse packageResponse=packageService.getPackageById(request.getPackageId());
 
-        Order order= OrderConverter.toOrder(userResponse,packageResponse);
+        Order order= OrderConverter.toOrder(userResponse.getId(),packageResponse,request);
 
 
 
@@ -45,8 +44,6 @@ public class OrderServiceImpl implements OrderService {
             order.setStatus("SUCCESS");
 
             updateUserPackage(userResponse,packageResponse);
-
-            //TODO rabbit ile başka servise mesaj gönderilecek ve orada purschase database e kaydedilecek
         }else {
             order.setStatus("FAILED");
         }

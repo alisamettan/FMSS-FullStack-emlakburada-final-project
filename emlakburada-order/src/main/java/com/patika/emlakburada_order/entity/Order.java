@@ -25,6 +25,15 @@ public class Order {
     @Column(name = "package_id")
     private Long packageId;
 
+    @Column(name = "card_number")
+    private Long cardNumber;
+
+    @Column(name = "expiration")
+    private String expiration;
+
+    @Column(name = "cvc")
+    private Integer cvc;
+
     @Column(name = "total_amount")
     private Double totalAmount;
 

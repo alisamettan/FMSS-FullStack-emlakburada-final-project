@@ -14,4 +14,5 @@ public class PackageResponse {
     private String name;
     private PackageType packageType;
     private Double price;
+
 }
