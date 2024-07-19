@@ -22,7 +22,6 @@ import java.util.List;
 public class JwtFilter implements GatewayFilter {
 
     private static final String AUTHORIZATION = "Authorization";
-    private static final String BEARER = "Bearer ";
 
     @Autowired
     private JwtUtil jwtUtil;

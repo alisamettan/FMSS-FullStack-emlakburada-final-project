@@ -17,12 +17,24 @@ import java.util.function.Function;
 public class JwtUtil {
 
 	private static final String SECRET_KEY = "emlakburada-patika-secret-key-emlakburada-patika-secret-key-emlakburada-patika-secret-key";
-
+	private static final long VALIDITY_DURATION_MS = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 	private Key key;
 
 	@PostConstruct
 	public void init() {
 		this.key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
+	}
+
+	public String generateToken(String userName) {
+		Date now = new Date();
+		Date validity = new Date(now.getTime() + VALIDITY_DURATION_MS);
+
+		return Jwts.builder()
+				.setSubject(userName)
+				.setIssuedAt(now)
+				.setExpiration(validity)
+				.signWith(key)
+				.compact();
 	}
 
 	public Claims getAllClaimsFromToken(String token) {

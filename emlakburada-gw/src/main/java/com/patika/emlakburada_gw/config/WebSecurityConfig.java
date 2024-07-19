@@ -70,8 +70,13 @@ public class WebSecurityConfig {
                                 .and()
                                 .path("/emlakburada/api/v1/orders/**")
                                 .filters(f -> f.filter(filter)).uri("lb://EMLAKBURADA-ORDER"))
+                .route("emlakburada-package-get",
+                        r -> r.method(HttpMethod.GET)
+                                .and()
+                                .path("/emlakburada/api/v1/packages/**")
+                                .uri("lb://EMLAKBURADA-PACKAGE"))
                 .route("emlakburada-package",
-                        r -> r.method(HttpMethod.GET,HttpMethod.POST)
+                        r -> r.method(HttpMethod.POST)
                                 .and()
                                 .path("/emlakburada/api/v1/packages/**")
                                 .filters(f -> f.filter(filter)).uri("lb://EMLAKBURADA-PACKAGE"))
