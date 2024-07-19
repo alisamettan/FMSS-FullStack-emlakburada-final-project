@@ -4,15 +4,23 @@ import com.patika.emlakburada_advert.client.user.UserService;
 import com.patika.emlakburada_advert.client.user.response.UserResponse;
 import com.patika.emlakburada_advert.converter.AdvertConverter;
 import com.patika.emlakburada_advert.dto.request.AdvertRequest;
+import com.patika.emlakburada_advert.dto.request.AdvertSearchRequest;
 import com.patika.emlakburada_advert.dto.request.AdvertStatusRequest;
 import com.patika.emlakburada_advert.dto.response.AdvertResponse;
 import com.patika.emlakburada_advert.entity.Advert;
+import com.patika.emlakburada_advert.entity.Image;
 import com.patika.emlakburada_advert.entity.enums.AdvertStatus;
 import com.patika.emlakburada_advert.exception.EmlakBuradaException;
 import com.patika.emlakburada_advert.queue.RabbitMqService;
 import com.patika.emlakburada_advert.repository.AdvertRepository;
+import com.patika.emlakburada_advert.repository.ImageRepository;
+import com.patika.emlakburada_advert.repository.specification.AdvertSpecification;
 import com.patika.emlakburada_advert.service.AdvertService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -22,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +39,10 @@ public class AdvertServiceImpl implements AdvertService {
     private final AdvertRepository advertRepository;
     private final UserService userService;
     private final RabbitMqService rabbitMqService;
+    private final ImageRepository imageRepository;
 
+
+    @Transactional
     @Override
     public ResponseEntity<AdvertResponse> save(AdvertRequest request) {
 
@@ -45,6 +57,7 @@ public class AdvertServiceImpl implements AdvertService {
             throw new EmlakBuradaException("The package has expired.User must purchase new package.",HttpStatus.BAD_REQUEST);
         }
 
+
         Advert advert= AdvertConverter.toAdvert(request,userResponse);
         advert=advertRepository.save(advert);
 
@@ -58,19 +71,18 @@ public class AdvertServiceImpl implements AdvertService {
     }
 
     @Override
-    public ResponseEntity<List<AdvertResponse>> findAll(){
+    public ResponseEntity<List<AdvertResponse>> findAll(AdvertSearchRequest request){
         List<AdvertResponse> advertResponses=new ArrayList<>();
 
+        Specification<Advert> advertSpecification= AdvertSpecification.initProductSpecification(request);
+        PageRequest pageRequest = PageRequest.of(request.getPage(), request.getSize());
+        Page<Advert> advertList=advertRepository.findAll(advertSpecification,pageRequest);
 
-        for(Advert advert:advertRepository.findAll()){
+        for(Advert advert:advertList){
             AdvertResponse advertResponse=AdvertConverter.toAdvertResponse(advert);
             advertResponses.add(advertResponse);
         }
 
-       advertResponses.sort(Comparator.comparing(advertResponse -> {
-           UserResponse userResponse=userService.getUserById(advertResponse.getUserId());
-           return userResponse.getIsPrioritized()?0:1;
-       }));
 
         return new ResponseEntity<>(advertResponses,HttpStatus.OK);
     }
@@ -127,6 +139,49 @@ public class AdvertServiceImpl implements AdvertService {
 
         return new ResponseEntity<>(advertResponse,HttpStatus.OK);
     }
+
+    @Transactional
+    @Override
+    public ResponseEntity<AdvertResponse> update(Long id,AdvertRequest request){
+        Optional<Advert> advertOptional=advertRepository.findById(id);
+
+        if(advertOptional.isEmpty()){
+            throw new EmlakBuradaException("Advert with given id cannot be found",HttpStatus.NOT_FOUND);
+        }
+
+        Advert existingAdvert=advertOptional.get();
+
+        Advert updatedAdvert=AdvertConverter.toUpdatedAdvert(request, existingAdvert);
+        // Convert URLs to Image objects using setUrl method
+        // Clear existing images
+        List<Image> existingImages = advertOptional.get().getImages();
+        for (Image image : existingImages) {
+            imageRepository.delete(image);
+        }
+        updatedAdvert.getImages().clear();
+
+        // Add new images
+        List<Image> newImages = request.getImages().stream()
+                .map(url -> {
+                    Image image = new Image();
+                    image.setUrl(url);
+                    image.setAdvert(existingAdvert);
+                    return image;
+                })
+                .collect(Collectors.toList());
+
+        updatedAdvert.getImages().addAll(newImages);
+
+        advertRepository.save(updatedAdvert);
+
+
+
+        AdvertResponse advertResponse=AdvertConverter.toAdvertResponse(updatedAdvert);
+
+        return new ResponseEntity<>(advertResponse,HttpStatus.OK);
+    }
+
+
 
     @Override
     public ResponseEntity<Advert> updateStatusActiveById(Long id){

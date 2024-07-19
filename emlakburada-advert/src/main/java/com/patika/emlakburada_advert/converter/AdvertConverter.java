@@ -58,4 +58,19 @@ public class AdvertConverter {
 
         return advertResponse;
     }
+
+    public static Advert toUpdatedAdvert(AdvertRequest request, Advert advert) {
+        advert.setCity(request.getCity());
+        advert.setDistrict(request.getDistrict());
+        advert.setHomeType(request.getHomeType());
+        advert.setAdvertType(request.getAdvertType());
+        advert.setTitle(request.getTitle());
+        advert.setDescription(request.getDescription());
+        advert.setNumberOfRooms(request.getNumberOfRooms());
+        advert.setNumberOfBath(request.getNumberOfBath());
+        advert.setSquareMeters(request.getSquareMeters());
+        advert.setPrice(request.getPrice());
+
+        return advert;
+    }
 }

@@ -2,6 +2,7 @@ package com.patika.emlakburada_advert.controller;
 
 
 import com.patika.emlakburada_advert.dto.request.AdvertRequest;
+import com.patika.emlakburada_advert.dto.request.AdvertSearchRequest;
 import com.patika.emlakburada_advert.dto.response.AdvertResponse;
 import com.patika.emlakburada_advert.entity.Advert;
 import com.patika.emlakburada_advert.service.AdvertService;
@@ -25,8 +26,18 @@ public class AdvertController {
     }
 
     @GetMapping
-    public ResponseEntity<List<AdvertResponse>> findAll(){
-        return advertService.findAll();
+    public ResponseEntity<List<AdvertResponse>> findAll(@RequestParam(required = false) String title,
+                                                        @RequestParam(required = false)String sort,
+                                                        @RequestParam(defaultValue = "0") int page,
+                                                        @RequestParam(defaultValue = "50") int size){
+
+        AdvertSearchRequest request=new AdvertSearchRequest();
+        request.setTitle(title);
+        request.setSort(sort);
+        request.setPage(page);
+        request.setSize(size);
+
+        return advertService.findAll(request);
     }
 
     @GetMapping("/{id}")
@@ -42,6 +53,11 @@ public class AdvertController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<AdvertResponse> delete(@PathVariable Long id){
         return advertService.delete(id);
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<AdvertResponse> update(@PathVariable Long id,@RequestBody AdvertRequest request){
+        return advertService.update(id,request);
     }
 
     @PutMapping("/update-status-active/{id}")
