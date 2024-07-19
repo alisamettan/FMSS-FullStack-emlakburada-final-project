@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/adverts")
@@ -26,10 +27,10 @@ public class AdvertController {
     }
 
     @GetMapping
-    public ResponseEntity<List<AdvertResponse>> findAll(@RequestParam(required = false) String title,
-                                                        @RequestParam(required = false)String sort,
-                                                        @RequestParam(defaultValue = "0") int page,
-                                                        @RequestParam(defaultValue = "50") int size){
+    public ResponseEntity<Map<String,Object>> findAll(@RequestParam(required = false) String title,
+                                       @RequestParam(required = false)String sort,
+                                       @RequestParam(defaultValue = "0") int page,
+                                       @RequestParam(defaultValue = "12") int size){
 
         AdvertSearchRequest request=new AdvertSearchRequest();
         request.setTitle(title);

@@ -7,10 +7,11 @@ import com.patika.emlakburada_advert.entity.Advert;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
+import java.util.Map;
 
 public interface AdvertService {
     ResponseEntity<AdvertResponse> save(AdvertRequest request);
-    ResponseEntity<List<AdvertResponse>> findAll(AdvertSearchRequest request);
+    ResponseEntity<Map<String,Object>> findAll(AdvertSearchRequest request);
     ResponseEntity<AdvertResponse> findById(Long id);
     ResponseEntity<List<AdvertResponse>> findByUserId(Long userId);
     ResponseEntity<AdvertResponse> delete(Long id);

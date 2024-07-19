@@ -6,10 +6,12 @@ import com.patika.emlakburada_advert.entity.enums.AdvertType;
 import com.patika.emlakburada_advert.entity.enums.HomeType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Data
 public class AdvertResponse {
     private Long id;
@@ -27,5 +29,4 @@ public class AdvertResponse {
     private AdvertStatus advertStatus;
     private Boolean isPrioritized;
     private List<Image> images;
-
 }

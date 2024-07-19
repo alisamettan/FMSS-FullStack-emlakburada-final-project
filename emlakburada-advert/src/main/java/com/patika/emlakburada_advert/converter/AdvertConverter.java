@@ -41,20 +41,23 @@ public class AdvertConverter {
     }
 
     public static AdvertResponse toAdvertResponse(Advert advert) {
-        AdvertResponse advertResponse=new AdvertResponse(advert.getId(),advert.getUserId(),advert.getCity(),
-                advert.getDistrict(),
-                advert.getHomeType(),
-                advert.getAdvertType(),
-                advert.getTitle(),
-                advert.getDescription(),
-                advert.getNumberOfRooms(),
-                advert.getNumberOfBath(),
-                advert.getSquareMeters(),
-                advert.getPrice(),
-                advert.getAdvertStatus(),
-                advert.getIsPrioritized(),
-                advert.getImages()
-                );
+        AdvertResponse advertResponse = new AdvertResponse();
+
+        advertResponse.setId(advert.getId());
+        advertResponse.setUserId(advert.getUserId());
+        advertResponse.setCity(advert.getCity());
+        advertResponse.setDistrict(advert.getDistrict());
+        advertResponse.setHomeType(advert.getHomeType());
+        advertResponse.setAdvertType(advert.getAdvertType());
+        advertResponse.setTitle(advert.getTitle());
+        advertResponse.setDescription(advert.getDescription());
+        advertResponse.setNumberOfRooms(advert.getNumberOfRooms());
+        advertResponse.setNumberOfBath(advert.getNumberOfBath());
+        advertResponse.setSquareMeters(advert.getSquareMeters());
+        advertResponse.setPrice(advert.getPrice());
+        advertResponse.setAdvertStatus(advert.getAdvertStatus());
+        advertResponse.setIsPrioritized(advert.getIsPrioritized());
+        advertResponse.setImages(advert.getImages());
 
         return advertResponse;
     }

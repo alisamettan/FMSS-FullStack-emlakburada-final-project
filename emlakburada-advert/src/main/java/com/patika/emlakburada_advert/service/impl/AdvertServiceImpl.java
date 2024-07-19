@@ -26,10 +26,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -71,20 +68,24 @@ public class AdvertServiceImpl implements AdvertService {
     }
 
     @Override
-    public ResponseEntity<List<AdvertResponse>> findAll(AdvertSearchRequest request){
+    public ResponseEntity<Map<String,Object>> findAll(AdvertSearchRequest request){
         List<AdvertResponse> advertResponses=new ArrayList<>();
 
         Specification<Advert> advertSpecification= AdvertSpecification.initProductSpecification(request);
         PageRequest pageRequest = PageRequest.of(request.getPage(), request.getSize());
         Page<Advert> advertList=advertRepository.findAll(advertSpecification,pageRequest);
 
+
         for(Advert advert:advertList){
             AdvertResponse advertResponse=AdvertConverter.toAdvertResponse(advert);
             advertResponses.add(advertResponse);
         }
+        Map<String, Object> response = new HashMap<>();
+        response.put("adverts", advertResponses);
+        response.put("totalCount", advertList.getTotalElements());
 
 
-        return new ResponseEntity<>(advertResponses,HttpStatus.OK);
+        return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
     @Override

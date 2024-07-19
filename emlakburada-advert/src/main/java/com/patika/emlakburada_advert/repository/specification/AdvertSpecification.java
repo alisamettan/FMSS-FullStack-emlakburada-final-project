@@ -24,9 +24,6 @@ public class AdvertSpecification {
             }
 
 
-            List<Order> orderList = new ArrayList<>();
-            orderList.add(criteriaBuilder.desc(root.get("isPrioritized")));
-
             if (request.getSort() != null && !request.getSort().isEmpty()) {
                 if (request.getSort().equalsIgnoreCase("price:asc")) {
                     query.orderBy(
@@ -39,7 +36,6 @@ public class AdvertSpecification {
                 }
             }
 
-            query.orderBy(orderList);
 
             return criteriaBuilder.and(predicateList.toArray(new Predicate[0]));
         };
