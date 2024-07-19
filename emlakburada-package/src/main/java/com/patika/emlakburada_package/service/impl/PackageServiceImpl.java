@@ -28,7 +28,7 @@ public class PackageServiceImpl implements PackageService {
         List<PackageResponse> packageResponses=new ArrayList<>();
 
         for(UserPackage userPackage :packageRepository.findAll()){
-            PackageResponse packageResponse=new PackageResponse(userPackage.getId(),userPackage.getName(),userPackage.getType(),userPackage.getPrice());
+            PackageResponse packageResponse=new PackageResponse(userPackage.getId(),userPackage.getName(),userPackage.getType(),userPackage.getPrice(),userPackage.getListingRights());
             packageResponses.add(packageResponse);
         }
         return new ResponseEntity<>(packageResponses, HttpStatus.OK);
@@ -40,7 +40,7 @@ public class PackageServiceImpl implements PackageService {
 
         userPackage=packageRepository.save(userPackage);
 
-        PackageResponse packageResponse=new PackageResponse(userPackage.getId(),userPackage.getName(),userPackage.getType(),userPackage.getPrice());
+        PackageResponse packageResponse=new PackageResponse(userPackage.getId(),userPackage.getName(),userPackage.getType(),userPackage.getPrice(),userPackage.getListingRights());
 
         return new ResponseEntity<>(packageResponse,HttpStatus.CREATED);
 
@@ -54,7 +54,7 @@ public class PackageServiceImpl implements PackageService {
             throw new EmlakBuradaException("Package with given id cannot be found",HttpStatus.NOT_FOUND);
         }
         UserPackage userPackage=packageOptional.get();
-        PackageResponse packageResponse=new PackageResponse(userPackage.getId(),userPackage.getName(),userPackage.getType(),userPackage.getPrice());
+        PackageResponse packageResponse=new PackageResponse(userPackage.getId(),userPackage.getName(),userPackage.getType(),userPackage.getPrice(),userPackage.getListingRights());
 
         return new ResponseEntity<>(packageResponse,HttpStatus.OK);
     }

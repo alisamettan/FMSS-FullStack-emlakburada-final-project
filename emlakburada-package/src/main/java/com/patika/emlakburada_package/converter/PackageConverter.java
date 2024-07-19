@@ -9,6 +9,7 @@ public class PackageConverter {
         userPackage.setName(request.getName());
         userPackage.setType(request.getPackageType());
         userPackage.setPrice(request.getPrice());
+        userPackage.setListingRights(request.getListingRights());
 
         return userPackage;
     }

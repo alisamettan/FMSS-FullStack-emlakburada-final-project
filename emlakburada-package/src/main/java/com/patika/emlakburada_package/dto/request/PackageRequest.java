@@ -9,4 +9,5 @@ public class PackageRequest {
     private String name;
     private PackageType packageType;
     private Double price;
+    private Integer listingRights;
 }
