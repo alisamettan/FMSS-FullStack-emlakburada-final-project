@@ -1,7 +1,7 @@
-export const getAllAdverts = async (page) => {
+export const getAllAdverts = async (page, size, title, sort) => {
   try {
     const res = await fetch(
-      `http://localhost:8080/emlakburada/api/v1/adverts?page=${page}`,
+      `http://localhost:8080/emlakburada/api/v1/adverts?page=${page}&size=${size}&title=${title}&sort=${sort}`,
       {
         cache: "no-store",
       }
@@ -15,8 +15,8 @@ export const getAllAdverts = async (page) => {
     console.log(data);
 
     return {
-      adverts: data,
-      totalCount: data.length,
+      adverts: data.adverts,
+      totalCount: data.totalCount, // Toplam advert sayısı
     };
   } catch (error) {
     console.error("Error fetching adverts:", error);

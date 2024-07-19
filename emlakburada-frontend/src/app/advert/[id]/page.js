@@ -2,7 +2,7 @@ import ImageCarousel from "@/components/image-carousel";
 import { getAdvertById } from "@/lib/adverts/data";
 import { getUser } from "@/lib/user/data";
 
-const SingleAdvert = async ({ params }) => {
+const Advert = async ({ params }) => {
   const { id } = params;
   const advert = await getAdvertById(id);
   const user = await getUser(advert.userId);
@@ -68,4 +68,4 @@ const SingleAdvert = async ({ params }) => {
   );
 };
 
-export default SingleAdvert;
+export default Advert;

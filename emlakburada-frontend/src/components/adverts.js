@@ -4,12 +4,18 @@ import { getAllAdverts } from "@/lib/adverts/data";
 import { PaginationComp } from "./pagination";
 
 const Adverts = async ({ searchParams }) => {
-  console.log("searccccc", searchParams);
-  const page = searchParams?.page || 0;
+  const page = parseInt(searchParams?.page) || 0;
+  const title = searchParams?.title || "";
+  const sort = searchParams?.sort || "";
+  const size = 12;
 
-  const { adverts, totalCount } = await getAllAdverts(page);
+  console.log("page", searchParams.page);
+
+  const { adverts, totalCount } = await getAllAdverts(page, size, title, sort);
+
   console.log("lengthhhh", totalCount);
   console.log(adverts);
+  console.log("sorooorrrr", sort);
 
   return (
     <div className="p-10">
@@ -17,7 +23,6 @@ const Adverts = async ({ searchParams }) => {
         {adverts?.map((advert, index) => {
           const isPrioritized = advert.isPrioritized;
 
-          // Pass advertisements should not be displayed
           if (advert.advertStatus === "PASSIVE") {
             return null;
           }
@@ -67,8 +72,8 @@ const Adverts = async ({ searchParams }) => {
           );
         })}
       </div>
-      <div className="pt-6">
-        <PaginationComp count={totalCount} />
+      <div className="py-12 flex justify-center">
+        <PaginationComp count={totalCount} page={page} size={size} />
       </div>
     </div>
   );

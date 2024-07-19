@@ -1,4 +1,3 @@
-import { TextField } from "@mui/material";
 import { cookies } from "next/headers";
 import { FaPlus } from "react-icons/fa";
 import { Tooltip } from "@mui/material";
@@ -7,16 +6,18 @@ import { Button } from "./ui/button";
 
 import ModalAdd from "./modal-add";
 
+import Filter from "./filter";
+
 const Search = () => {
   const cookieStore = cookies();
   const token = cookieStore.get("token")?.value || "";
 
-  const isTokenAvailable = token ? true : false; // Check if token is available
+  const isTokenAvailable = token ? true : false;
 
   return (
     <div className="bg-blue-200 py-4">
       <div className="text-center flex justify-center items-center gap-10">
-        <TextField id="outlined-basic" label="Search" variant="outlined" />
+        <Filter />
         <div
           className={`bg-slate-400 p-2 rounded-lg text-white flex justify-center items-center gap-1`}
         >

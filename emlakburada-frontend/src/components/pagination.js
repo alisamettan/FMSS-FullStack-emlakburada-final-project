@@ -1,38 +1,39 @@
 "use client";
+import { Button } from "@mui/material";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-export function PaginationComp({ totalCount }) {
+export function PaginationComp({ count, page, size }) {
   const searchParams = useSearchParams();
   const { replace } = useRouter();
   const pathname = usePathname();
 
-  const page = searchParams.get("page") || 1;
-
-  const params = new URLSearchParams(searchParams);
-  console.log("faaaaa", searchParams);
-
-  const ITEM_PER_PAGE = 2;
-
-  const hasPrev = ITEM_PER_PAGE * (parseInt(page) - 1) > 0;
-  const hasNext =
-    ITEM_PER_PAGE * (parseInt(page) - 1) + ITEM_PER_PAGE < totalCount;
+  const hasPrev = page > 0;
+  const hasNext = (page + 1) * size < count;
 
   const handleChangePage = (type) => {
-    type === "prev"
-      ? params.set("page", parseInt(page) - 1)
-      : params.set("page", parseInt(page) + 1);
+    const newPage = type === "prev" ? page - 1 : page + 1;
+    const params = new URLSearchParams(searchParams);
+    params.set("page", newPage);
 
-    replace(`${pathname}?${params}`);
+    replace(`${pathname}?${params.toString()}`);
   };
 
   return (
     <div>
-      <button disabled={!hasPrev} onClick={() => handleChangePage("prev")}>
+      <Button
+        className="text-lg"
+        disabled={!hasPrev}
+        onClick={() => handleChangePage("prev")}
+      >
         Previous
-      </button>
-      <button disabled={!hasNext} onClick={() => handleChangePage("next")}>
+      </Button>
+      <Button
+        className="text-lg"
+        disabled={!hasNext}
+        onClick={() => handleChangePage("next")}
+      >
         Next
-      </button>
+      </Button>
     </div>
   );
 }
