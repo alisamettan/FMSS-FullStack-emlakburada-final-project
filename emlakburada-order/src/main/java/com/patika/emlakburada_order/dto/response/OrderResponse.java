@@ -2,6 +2,7 @@ package com.patika.emlakburada_order.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
@@ -9,6 +10,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Getter
 @Setter
+@NoArgsConstructor
 public class OrderResponse {
     private Long id;
     private Long userId;
