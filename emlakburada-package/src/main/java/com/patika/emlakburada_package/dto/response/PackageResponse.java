@@ -4,9 +4,11 @@ package com.patika.emlakburada_package.dto.response;
 import com.patika.emlakburada_package.entity.enums.PackageType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 public class PackageResponse {
