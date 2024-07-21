@@ -48,10 +48,9 @@ const ModalUpdate = ({ advert }) => {
     <DialogContent className="max-w-[70rem]">
       <form onSubmit={handleSubmit}>
         <DialogHeader>
-          <DialogTitle>Edit Advertisement</DialogTitle>
+          <DialogTitle>Edit Adverts</DialogTitle>
           <DialogDescription>
-            Make changes to your advertisement here. Click save when you're
-            done.
+            Make changes to your adverts here. Click save when you're done.
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4 grid-cols-1 sm:grid-cols-2">
