@@ -28,12 +28,21 @@ const Header = async () => {
             <UserDropDown fullName={fullName} />
           </div>
         ) : (
-          <Link
-            href="/login"
-            className="text-white hover:text-red-500 cursor-pointer bg-slate-400 p-1 rounded-md shadow-md hover:bg-slate-500"
-          >
-            Sign In
-          </Link>
+          <div className="flex items-center gap-3">
+            <Link
+              href="/login"
+              className="text-white hover:text-red-500 cursor-pointer bg-slate-400 p-1 rounded-md shadow-md hover:bg-slate-500"
+            >
+              Sign In
+            </Link>
+            <p className="text-2xl text-gray-500">/</p>
+            <Link
+              href="/signup"
+              className="text-white hover:text-red-500 cursor-pointer bg-slate-400 p-1 rounded-md shadow-md hover:bg-slate-500"
+            >
+              Sign up
+            </Link>
+          </div>
         )}
       </div>
     </div>

@@ -17,9 +17,12 @@ const UserProfile = async () => {
 
   // Date hesaplamaları
   const today = new Date();
-  const endDate = new Date(userData.endDateOfPackage);
-  const timeDiff = endDate - today;
-  const daysLeft = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+  let daysLeft = 0;
+  if (userData.endDateOfPackage) {
+    const endDate = new Date(userData.endDateOfPackage);
+    const timeDiff = endDate - today;
+    daysLeft = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+  }
 
   return (
     <div className="py-10 px-20">
@@ -29,8 +32,8 @@ const UserProfile = async () => {
           <strong>Listing Rights:</strong> {userData.listingRights}
         </p>
         <p>
-          <strong>Package End Date:</strong> {userData.endDateOfPackage} (
-          {daysLeft} days left)
+          <strong>Package End Date:</strong>{" "}
+          {userData.endDateOfPackage || "N/A"} ({daysLeft} days left)
         </p>
       </div>
       <table className="w-full shadow-md">
@@ -44,7 +47,7 @@ const UserProfile = async () => {
           </tr>
         </thead>
         <tbody>
-          {data.map((advert, index) => {
+          {data?.map((advert, index) => {
             return (
               <tr className="border-b" key={index}>
                 <td>

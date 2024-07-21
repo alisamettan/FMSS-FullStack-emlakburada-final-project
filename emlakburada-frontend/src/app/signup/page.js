@@ -1,8 +1,8 @@
+import SignupForm from "@/components/signup/signup-form";
 import Link from "next/link";
-import LoginForm from "@/components/login/loginForm";
 import { FaArrowRight } from "react-icons/fa";
 
-export default function LoginPage() {
+const Signup = () => {
   return (
     <div className="relative flex items-center justify-center h-screen bg-gray-100">
       <header className="absolute top-4 right-4">
@@ -13,7 +13,9 @@ export default function LoginPage() {
           </button>
         </Link>
       </header>
-      <LoginForm />
+      <SignupForm />
     </div>
   );
-}
+};
+
+export default Signup;

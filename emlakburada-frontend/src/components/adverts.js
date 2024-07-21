@@ -14,8 +14,8 @@ const Adverts = async ({ searchParams }) => {
   const { adverts, totalCount } = await getAllAdverts(page, size, title, sort);
 
   console.log("lengthhhh", totalCount);
-  console.log(adverts);
-  console.log("sorooorrrr", sort);
+  console.log("adverts:", adverts);
+  console.log("sort", sort);
 
   return (
     <div className="p-10">

@@ -1,17 +1,20 @@
 "use client";
-
-import { login } from "@/lib/login/actions";
+import { signup } from "@/lib/signup/actions";
+import { useRouter } from "next/navigation";
+import React from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-export default function LoginForm() {
+const SignupForm = () => {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
     formState: { errors, isValid },
   } = useForm({
     defaultValues: {
+      fullName: "",
       email: "",
       password: "",
     },
@@ -20,9 +23,10 @@ export default function LoginForm() {
 
   const onSubmit = async (formData) => {
     try {
-      await login(formData);
+      await signup(formData);
+      router.push("/login");
     } catch (error) {
-      console.error("Login failed:", error.message);
+      console.error("Signup failed:", error.message);
       console.log(error.message);
       toast.error(error.message, {
         position: "top-right",
@@ -34,10 +38,26 @@ export default function LoginForm() {
       });
     }
   };
-
   return (
     <div className="w-full max-w-md p-8 bg-white rounded shadow-md">
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
+        <div className="flex flex-col">
+          <label className="text-xl text-gray-700">Full Name</label>
+          <input
+            className={`h-12 rounded-md px-4 mt-2 border ${
+              errors.fullName ? "border-red-500" : "border-gray-300"
+            }`}
+            type="text"
+            {...register("fullName", {
+              required: "Name field is required!",
+            })}
+          />
+          {errors.fullName && (
+            <p className="text-sm text-red-700 mt-1">
+              {errors.fullName.message}
+            </p>
+          )}
+        </div>
         <div className="flex flex-col">
           <label className="text-xl text-gray-700">Email</label>
           <input
@@ -87,4 +107,6 @@ export default function LoginForm() {
       </form>
     </div>
   );
-}
+};
+
+export default SignupForm;
