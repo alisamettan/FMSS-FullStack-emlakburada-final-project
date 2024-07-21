@@ -1,6 +1,7 @@
 "use client";
 
 import { login } from "@/lib/login/actions";
+import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -81,8 +82,16 @@ export default function LoginForm() {
             className="px-10 py-3 bg-blue-500 rounded-lg text-white disabled:opacity-50"
             disabled={!isValid}
           >
-            Submit
+            Sign in
           </button>
+        </div>
+        <div className="text-center">
+          <p className="text-gray-700">
+            Don't have an account?{" "}
+            <Link href="/signup" className="text-blue-300 hover:text-blue-500">
+              Sign Up
+            </Link>
+          </p>
         </div>
       </form>
     </div>

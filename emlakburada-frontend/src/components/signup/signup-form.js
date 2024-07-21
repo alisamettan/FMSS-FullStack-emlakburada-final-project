@@ -1,5 +1,6 @@
 "use client";
 import { signup } from "@/lib/signup/actions";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { useForm } from "react-hook-form";
@@ -24,6 +25,14 @@ const SignupForm = () => {
   const onSubmit = async (formData) => {
     try {
       await signup(formData);
+      toast.success("You successfully registered!", {
+        position: "top-right",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        draggable: true,
+        theme: "light",
+      });
       router.push("/login");
     } catch (error) {
       console.error("Signup failed:", error.message);
@@ -101,8 +110,16 @@ const SignupForm = () => {
             className="px-10 py-3 bg-blue-500 rounded-lg text-white disabled:opacity-50"
             disabled={!isValid}
           >
-            Submit
+            Sign up
           </button>
+        </div>
+        <div className="text-center">
+          <p className="text-gray-700">
+            Already have an account?{" "}
+            <Link href="/login" className="text-blue-300 hover:text-blue-500">
+              Sign In
+            </Link>
+          </p>
         </div>
       </form>
     </div>
